@@ -13,4 +13,4 @@ help: ## This help.
 
 # TASKS
 install: ## Install the dependenceis
-	@brew install aws aws-vault fzy
+	@brew install awscli aws-vault fzy
