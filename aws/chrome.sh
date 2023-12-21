@@ -29,6 +29,7 @@ function askProfile() {
     profile=`aws configure list-profiles | fzy --prompt "> "`
 }
 
+# Source: https://github.com/chrisfowles/aws-vault-quick-guide/blob/master/browsers.md
 function login {
     # set to yes to create one-time use profiles in /tmp
     # anything else will create them in $HOME/.aws/chrome
