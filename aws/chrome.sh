@@ -33,7 +33,7 @@ function askProfile() {
 function login {
     # set to yes to create one-time use profiles in /tmp
     # anything else will create them in $HOME/.aws/chrome
-    TEMP_PROFILE="yes"
+    TEMP_PROFILE="NO"
 
     # set to yes to always start in a new window
     NEW_WINDOW="yes"
