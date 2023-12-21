@@ -30,14 +30,15 @@ function askProfile() {
 }
 
 function login() {
-  echo ""
-  info "-- AWS Console"
-  aws-vault login $profile
-  echo ""
-  info "-- AWS CLI"
-  aws sso login --profile $profile
-  echo ""
-  success "+ Login successful - \"$profile\" profile"
+    echo ""
+    info "-- AWS Console"
+    aws-vault login $profile
+    echo ""
+    info "-- AWS CLI"
+    aws sso login --profile $profile
+    echo ""
+    success "+ Login successful"
+    echo "[$profile] AWS profile"
 }
 
 function main() {

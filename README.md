@@ -20,6 +20,7 @@ Install the scripts using some simple aliases you'd add to your RC file (such as
 
 ```
 alias aws:login="bash ~/.scripts/aws/login.sh"
+alias aws:login:chrome="bash ~/.scripts/aws/chrome.sh"
 alias aws:login:ecr="bash ~/.scripts/aws/ecrlogin.sh"
 alias aws:logout="bash ~/.scripts/aws/logout.sh"
 alias aws:ecssh="bash ~/.scripts/aws/ecssh.sh"
