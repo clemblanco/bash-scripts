@@ -1,0 +1,73 @@
+#!/bin/bash
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_PATH="$SCRIPT_DIR/destination.ovpn"
+LOG_FILE="$SCRIPT_DIR/destination.log"
+PID_FILE="$SCRIPT_DIR/destination.pid"
+LOCK_FILE="$SCRIPT_DIR/.lock"
+NOW=$(date +%s)
+
+isStarted() {
+    if [ -f "$LOCK_FILE" ]; then
+        return 0 # exists
+    else
+        return 1 # doesn't exist
+    fi
+}
+
+duration() {
+    if isStarted; then
+        timestamp=$(head -n 1 $LOCK_FILE)
+        diff=$(($NOW - timestamp))
+
+        hours=$(( diff / 3600 ))
+        minutes=$(( (diff % 3600) / 60 ))
+        seconds=$(( diff % 60 ))
+
+        printf "Duration: %02d:%02d:%02d\n" "$hours" "$minutes" "$seconds"
+    fi
+}
+
+start() {
+    echo "Connecting..."
+    sudo openvpn --config "$CONFIG_PATH" --writepid "$PID_FILE" --log "$LOG_FILE" --daemon
+    sleep 2
+    if [[ -f "$PID_FILE" ]] && ps -p "$(cat "$PID_FILE")" > /dev/null; then
+        echo "VPN is connected."
+        echo $NOW > $LOCK_FILE
+    else
+        echo "VPN failed to connect."
+        exit 1
+    fi
+}
+
+stop() {
+    if isStarted; then
+        sudo pkill openvpn
+        rm $LOCK_FILE
+        rm $LOG_FILE
+        echo "VPN is disconnected."
+    fi
+}
+
+shouldStop() {
+    read -rp "Do you want to disconnect? [y/n]:" answer
+    case "$answer" in
+        [Yy]* ) return 0; break;;
+        * ) return 1;;
+    esac
+}
+
+main() {
+    if isStarted; then
+        echo "VPN is connected."
+        duration
+        if shouldStop; then
+            stop
+        fi
+    else
+        start
+    fi
+}
+
+main
